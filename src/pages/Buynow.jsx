@@ -28,9 +28,9 @@ const Buynow = () => {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = async (productId, selectedColor) => {
-    if (!selectedColor ) {
-      toast.error("Please Select Color.");
+  const handleAddToCart = async (productId, selectedColor, selectedSize) => {
+    if (!selectedColor || !selectedSize) {
+      toast.error("Please Select Color And Size.");
       return;
     }
     setLoading(true);
@@ -42,16 +42,16 @@ const Buynow = () => {
       const response = await axios.post(
         "http://localhost:1122/api/user/cart/addtocart",
         {
-          productId: productId,
+          cartItem: productId,
           color: selectedColor,
-          // quantity: 5,
+          size: selectedSize,
         },
-     
-        
+
         {
           headers,
         }
-      );   console.log("product ->>>",productId);
+      );
+      console.log("product ->>>", productId);
 
       console.log("response is cart", response);
       toast.success("Product added to cart successfully!");
@@ -82,7 +82,8 @@ const Buynow = () => {
 
   return (
     <div className="bg-[#ffffff]">
-      <ToastContainer position="top-right" autoClose={3000} /> {/* Toast container */}
+      <ToastContainer position="top-right" autoClose={3000} />{" "}
+      {/* Toast container */}
       <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">
         {products.map((product) => {
           const selectedColor =
@@ -132,10 +133,11 @@ const Buynow = () => {
                   {product.colors?.map((color, index) => (
                     <button
                       key={index}
-                      className={`h-6 w-6 rounded-full border ${selectedColor === color
-                        ? "ring ring-[#ff0000] ring-offset-1"
-                        : "border-gray-300"
-                        }`}
+                      className={`h-6 w-6 rounded-full border ${
+                        selectedColor === color
+                          ? "ring ring-[#ff0000] ring-offset-1"
+                          : "border-gray-300"
+                      }`}
                       style={{ backgroundColor: color }}
                       onClick={() => handleColorChange(product._id, color)}
                     ></button>
@@ -147,10 +149,11 @@ const Buynow = () => {
                   {product.sizes?.map((size, index) => (
                     <button
                       key={index}
-                      className={`px-3 py-1 rounded border text-gray-700 text-sm ${selectedSize === size
-                        ? "bg-black text-white border-black"
-                        : "border-gray-300"
-                        }`}
+                      className={`px-3 py-1 rounded border text-gray-700 text-sm ${
+                        selectedSize === size
+                          ? "bg-black text-white border-black"
+                          : "border-gray-300"
+                      }`}
                       onClick={() => handleSizeChange(product._id, size)}
                     >
                       {size}
