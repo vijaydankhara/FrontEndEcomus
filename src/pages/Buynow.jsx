@@ -28,16 +28,11 @@ const Buynow = () => {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = async (productId, selectedColor, selectedSize) => {
-    if (!selectedColor || !selectedSize) {
-      toast.error("Please select a color and size before adding to cart.");
+  const handleAddToCart = async (productId, selectedColor) => {
+    if (!selectedColor ) {
+      toast.error("Please Select Color.");
       return;
     }
-    console.log("Add to Cart Data To Body:", {
-      productId,
-      selectedColor,
-      selectedSize,
-    });
     setLoading(true);
 
     try {
@@ -49,13 +44,14 @@ const Buynow = () => {
         {
           productId: productId,
           color: selectedColor,
-          size: selectedSize,
           // quantity: 5,
         },
+     
+        
         {
           headers,
         }
-      );
+      );   console.log("product ->>>",productId);
 
       console.log("response is cart", response);
       toast.success("Product added to cart successfully!");
@@ -64,7 +60,7 @@ const Buynow = () => {
         "Error adding product to cart:",
         error.response ? error.response.data : error.message
       );
-      toast.error("Failed to add product to cart. Please try again!");
+      toast.error("Please try again!!!");
     } finally {
       setLoading(false);
     }
@@ -104,7 +100,7 @@ const Buynow = () => {
               {/* Product Image */}
               <div className="h-44 w-full rounded-md overflow-hidden relative ">
                 <img
-                  src="https://s.alicdn.com/@sc04/kf/Hc81fbd50244b4cee81fc27caa7206c83n.jpg_720x720q50.jpg"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNNkdzDpKkcXoL_u519pSpa52ZFTp2OTwY3A&s"
                   alt={product.title}
                   className="h-full w-full object-fill hover:scale-105 transition-transform duration-500"
                 />
