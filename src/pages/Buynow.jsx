@@ -75,7 +75,7 @@ const Buynow = () => {
         return;
       }
       const response = await axios.post(
-        "http://localhost:1122/api/user/wishlish/addwishlist",
+        "http://localhost:1122/api/user/wishlish/addwishlish",
         { cartItem: productId },
         {
           headers,
