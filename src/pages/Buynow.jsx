@@ -66,10 +66,28 @@ const Buynow = () => {
     }
   };
 
-  const handleAddToWishlist = (productId) => {
-    console.log("Add to Wishlist clicked for product ID:", productId);
-    toast.success("Product added to wishlist!");
-    // "Add to Wishlist" .
+  const handleAddToWishlist = async (productId) => {
+    try {
+      const token = localStorage.getItem("userToken");
+      const headers = { authorization: `Bearer ${token}` };
+      if (!token) {
+        console.error("User not authenticated");
+        return;
+      }
+      const response = await axios.post(
+        "http://localhost:1122/api/user/wishlish/addwishlist",
+        { cartItem: productId },
+        {
+          headers,
+        }
+      );
+      console.log("Response:", response.data);
+      toast.success(response.data.message || "Product added to wishlist!");
+    } catch (error) {
+      toast.error(
+        error.response?.data.message || "Failed to add product to wishlist"
+      );
+    }
   };
 
   const handleColorChange = (productId, color) => {
