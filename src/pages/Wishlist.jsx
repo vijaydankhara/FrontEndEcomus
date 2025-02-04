@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { ImSpinner3 } from "react-icons/im"; // For loading spinner
-
+import { ImSpinner3 } from "react-icons/im";
+import { useNavigate } from "react-router-dom";
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
@@ -18,7 +18,7 @@ const Wishlist = () => {
           return;
         }
 
-        const headers = { Authorization: `Bearer ${token}` };
+        const headers = { authorization: `Bearer ${token}` };
         const response = await axios.get(
           "http://localhost:1122/api/user/wishlish/getallwishlish",
           { headers }
@@ -63,6 +63,7 @@ const Wishlist = () => {
       );
 
       toast.success("Product added to cart successfully!");
+      navigate("/addtocart");
     } catch (error) {
       console.error(
         "Error adding product to cart:",
@@ -81,11 +82,14 @@ const Wishlist = () => {
       const headers = { authorization: `Bearer ${token}` };
 
       const response = await axios.delete(
-        `http://localhost:1122/api/user/wishlish/deletewishlish/${productId}`,
+        `http://localhost:1122/api/user/wishlist/deletewishlist/${productId}`,
         { headers }
       );
-      setWishlist(wishlist.filter((item) => item._id !== productId));
-      toast.success("Product removed from wishlist.");
+
+      if (response.status === 200) {
+        setWishlist(wishlist.filter((item) => item._id !== productId));
+        toast.success("Product removed from wishlist.");
+      }
     } catch (error) {
       console.error(
         "Error removing product from wishlist:",
@@ -182,8 +186,9 @@ const Wishlist = () => {
                       <button
                         className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs"
                         onClick={() => handleRemoveFromWishlist(item._id)}
+                        disabled={loading}
                       >
-                        Remove
+                        {loading ? "Removing..." : "Remove"}
                       </button>
                     </div>
                   </td>

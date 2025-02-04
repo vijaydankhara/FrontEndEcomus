@@ -6,6 +6,7 @@ import { RiShoppingBag2Line } from "react-icons/ri";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footers from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const Buynow = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ const Buynow = () => {
   const [selectedSizes, setSelectedSizes] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -55,6 +57,7 @@ const Buynow = () => {
 
       console.log("response is cart", response);
       toast.success("Product added to cart successfully!");
+      navigate("/addtocart");
     } catch (error) {
       console.error(
         "Error adding product to cart:",
@@ -83,6 +86,7 @@ const Buynow = () => {
       );
       console.log("Response:", response.data);
       toast.success(response.data.message || "Product added to wishlist!");
+      navigate("/wishlist");
     } catch (error) {
       toast.error(
         error.response?.data.message || "Failed to add product to wishlist"
